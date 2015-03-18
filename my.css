@@ -1,0 +1,25 @@
+.greenBg {
+	background: green;
+}
+
+.fixedPendingRelease {
+	display: none;
+}
+
+.notFixedPendingRelease {
+	background: red;
+}
+
+.buttonPanel {
+	top: 0px;
+	right: 0px;
+}
+
+.buttonOn {
+	background: black;
+	color: white;
+}
+
+#visibleRowCount {
+	margin-left: 3px;
+}

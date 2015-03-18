@@ -1,0 +1,23 @@
+{
+    "name": "SLAQ Filter",
+    "description": "Clicking on the table in a SLAQ report will hide escalations that aren't waiting on Engineering.",
+    "version": "0.1",
+    "permissions": [
+    "tabs","<all_urls>"
+    ],
+    "browser_action": {
+        "default_icon": "icon.png"
+    },
+
+    "content_scripts": [
+        {
+        "matches": [
+            "https://bugzilla.corp.nai.org/bugzilla/apps/SLA/product/*"
+            ],
+        "css": ["my.css"],
+        "js": ["jquery-2.1.3.js", "content.js"],
+        "run_at": "document_end"         // pay attention to this line
+        }
+    ], 
+    "manifest_version":2
+}

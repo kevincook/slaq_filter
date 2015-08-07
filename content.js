@@ -1,4 +1,33 @@
-// alert("hello");
+// ==UserScript==
+// @name        SLAQ Filter
+// @namespace   kevin_cook
+// @description Filter's the SLAQ report
+// @include     https://bugzilla.corp.nai.org/bugzilla/apps/SLA/product/*
+
+// @require       http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
+// @version     1
+// @grant       none
+// ==/UserScript==
+
+
+function addGlobalStyle(css) {
+    var head, style;
+    head = document.getElementsByTagName('head')[0];
+    if (!head) { return; }
+    style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerHTML = css;
+    head.appendChild(style);
+}
+
+addGlobalStyle ( 
+    '.greenBg { background: green; } ' +
+    '.fixedPendingRelease {	display: none; }' +
+    '.notFixedPendingRelease { background: red; }' +
+    '.buttonPanel {	top: 0px;	right: 0px; }' +
+    '.buttonOn { background: black; color: white; }' +
+    '#visibleRowCount {	margin-left: 3px; }'
+);
 
 var zNode       = document.createElement ('div');
 zNode.innerHTML = '<button id="btn_fixedPendingRelease" type="button">FPR</button>'
@@ -9,6 +38,7 @@ zNode.innerHTML = '<button id="btn_fixedPendingRelease" type="button">FPR</butto
                 + '<button id="btn_engineeringUnassigned" type="button">EU</button>'
                 + '<button id="btn_engineeringAssigned" type="button">EA</button>'
                 + '<button id="btn_initial" type="button">Init</button>'
+                + '<button id="btn_released" type="buggon">Released</button>'
                 + '<span id="visibleRowCount"></span>'
                 ;
 zNode.setAttribute ('id', 'myContainer');
@@ -51,15 +81,25 @@ document.getElementById ("btn_initial").addEventListener (
     "click", InitClickAction, false
 );
 
+document.getElementById ("btn_released").addEventListener (
+    "click", ReleasedClickAction, false
+);
+
 function UpdateVisibleRowsCount()
 {
-	var numOfVisibleRows = $('table.buglist tr:visible').length - 1;
-	console.log('Number of Visible Rows: ' + numOfVisibleRows);
-	$(visibleRowCount).text('Visible defect count: ' + numOfVisibleRows);
+	  var numOfVisibleRows = $('table.buglist tr:visible').length - 1;
+    console.log('Number of Visible Rows: ' + numOfVisibleRows);
+
+    x = $('table.buglist tr:visible td:nth-child(6)').filter(function(index) {
+        return parseInt($(this).text(), 10) > 100;
+    });
+    
+   console.log(x.length);
+   
+    $(visibleRowCount).text('Visible defect count: ' + numOfVisibleRows + "/" + x.length);
 }
 
 UpdateVisibleRowsCount();
-
 
 function ToggleButton(buttonName, cellValue) {
 	queryStr = 'table.buglist td:contains('+ cellValue + ')'; 
@@ -106,4 +146,8 @@ function EAClickAction (zEvent) {
 
 function InitClickAction (zEvent) {
 	ToggleButton('#btn_initial', 'Initial');
+}
+
+function ReleasedClickAction (zEvent) {
+    ToggleButton('#btn_released', 'Released');
 }

@@ -30,7 +30,8 @@ addGlobalStyle (
 );
 
 var zNode       = document.createElement ('div');
-zNode.innerHTML = '<button id="btn_fixedPendingRelease" type="button">FPR</button>'
+zNode.innerHTML = '<button id="btn_all" type="button">All</button>'
+                + '<button id="btn_fixedPendingRelease" type="button">FPR</button>'
                 + '<button id="btn_waitingOnCustomer" type="button">WoC</button>'
                 + '<button id="btn_pendingConfirmation" type="button">PC</button>'
                 + '<button id="btn_waitingOnSupport" type="button">WoS</button>'
@@ -49,6 +50,11 @@ document.getElementById("pagehead").appendChild(zNode);
 //document.body.appendChild (zNode);
 
 //--- Activate the newly added button.
+
+document.getElementById ('btn_all').addEventListener(
+    "click", ALLClickAction, false
+);
+
 document.getElementById ("btn_fixedPendingRelease").addEventListener (
     "click", FPRClickAction, false
 );
@@ -114,6 +120,18 @@ function ToggleButton(buttonName, cellValue) {
 	}
 
 	UpdateVisibleRowsCount();
+}
+
+function ALLClickAction (zEvent) {
+	ToggleButton('#btn_fixedPendingRelease', 'Fixed Pending Release');
+	ToggleButton('#btn_waitingOnCustomer', 'Waiting on Customer');
+	ToggleButton('#btn_pendingConfirmation', 'Pending Confirmation');
+	ToggleButton('#btn_waitingOnSupport', 'Waiting on Support');
+	ToggleButton('#btn_waitingOnComponent', 'Waiting on Component');
+	ToggleButton('#btn_engineeringUnassigned', 'Engineering Unassigned');
+	ToggleButton('#btn_engineeringAssigned', 'Engineering Assigned');
+	ToggleButton('#btn_initial', 'Initial');
+  ToggleButton('#btn_released', 'Released');  
 }
 
 function FPRClickAction (zEvent) {
